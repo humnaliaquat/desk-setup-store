@@ -1,0 +1,26 @@
+@import "tailwindcss";
+*{
+  scrollbar-width: thin;
+  scrollbar-color: #c4c4c4 transparent;
+
+}
+body{
+  margin: 0;
+  padding: 0;
+  color: #333;
+   
+}
+@keyframes scrollText {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scrollText {
+  animation: scrollText 5s linear infinite;
+  display: flex;
+}
+
+
+
+/* [#c9903c] */
+
