@@ -7,7 +7,7 @@
 body{
   margin: 0;
   padding: 0;
-  color: #333;
+  color: #1f1f1f;
    
 }
 @keyframes scrollText {
@@ -19,7 +19,58 @@ body{
   animation: scrollText 5s linear infinite;
   display: flex;
 }
+.group{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  gap: 1em;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-10%); /* adjust to speed */
+  }
+}
 
+.animate-scroll {
+  animation: scroll 15s linear infinite;
+}
+
+.card{
+  flex: 0 0 5em;
+  height: 5em;
+  align-content: center;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.nav-link {
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: orangered;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::before {
+  width: 100%;
+}
 
 
 /* [#c9903c] */

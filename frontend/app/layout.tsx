@@ -2,7 +2,7 @@
 import "./globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { DM_Serif_Display } from "next/font/google";
-import Navbar from "./Navbar";
+import Navbar from "./componenets/layout/Navbar";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -25,10 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={jakarta.className}>
       <body>
-        <div className="flex justify-center text-gray-700 py-2 items-center bg-white border-b border-gray-200 text-xs ">
+        <div className="flex justify-center text-WHITE font-medium py-2.5 items-center bg-orange-400  text-xs ">
           <h1 className="text-sm ">
-            Enjoy FREE standard delivery on orders over 2000 Rs.{" "}
-            <span className="text-orange-400">Shop now</span>
+            ENJOY FREE STANDARD DELIVERY ON ORDERS OVER 2000 RUPEES.{" "}
+            <span className="underline">SHOP NOW</span>
           </h1>
         </div>
         <Navbar />

@@ -90,7 +90,7 @@ export default function CategoriesSection() {
 
             {/* BOTTOM CENTER TITLE */}
             <div className="absolute bottom-4 w-full flex justify-center">
-              <span className="text-black text-xm font-medium px-4 py-2 bg-white rounded backdrop-blur-sm">
+              <span className="text-black text-xm font-medium px-6 py-1.5 bg-white rounded-full backdrop-blur-sm">
                 {col.title}
               </span>
             </div>

@@ -6,6 +6,9 @@ import { DM_Serif_Display } from "next/font/google";
 import CategoriesSection from "./componenets/homePageItems/CategoriesSection";
 import FeaturedProducts from "./componenets/homePageItems/FeaturedProducts";
 import Collections from "./componenets/homePageItems/Collections";
+import AISection from "./componenets/homePageItems/AISection";
+import CollectionSec from "./componenets/homePageItems/CollectionSec";
+import BestSeller from "./componenets/homePageItems/BestSeller";
 
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
@@ -41,11 +44,11 @@ export default function Home() {
           </p>
 
           <div className="flex gap-6">
-            <button className="text-orange-100 bg-transparent border border-orange-400 font-semibold py-2.5 px-6 rounded-full">
+            <button className="text-white bg-transparent border border-white font-semibold py-2.5 px-6 rounded-full">
               Try AI Setup Builder
             </button>
 
-            <button className="text-white bg-orange-400 hover:brightness-110 transition font-semibold py-3 px-6 rounded-full shadow-lg flex justify-center items-center gap-2">
+            <button className="text-black bg-white hover:brightness-110 transition font-semibold py-3 px-6 rounded-full shadow-lg flex justify-center items-center gap-2">
               Shop Now
               <span
                 className="inline-block"
@@ -73,42 +76,12 @@ export default function Home() {
       </div>
       {/* Categories section */}
       <CategoriesSection />
+
+      <BestSeller />
+      <CollectionSec />
+
+      <AISection />
       <FeaturedProducts />
-      <div className="relative overflow-hidden py-4 mt-10 mb-8">
-        <div className="flex whitespace-nowrap animate-scrollText">
-          {/* COPY 1 */}
-          <div className="flex gap-10 items-center">
-            <span className="text-5xl font-bold">
-              Free shipping for orders over 2000 Rs
-            </span>
-            <Circle className="w-3 h-3" />
-            <span className="text-5xl font-bold">
-              Pay with multiple credit cards
-            </span>
-            <Circle className="w-3 h-3" />
-            <span className="text-5xl font-bold">Save up to 50% off</span>
-          </div>
-
-          {/* COPY 2 (duplicate) */}
-          <div aria-hidden className="flex gap-10 items-center ml-10">
-            <span className="text-5xl font-bold">
-              Free shipping for orders over 2000 Rs
-            </span>
-            <Circle className="w-3 h-3" />
-            <span className="text-5xl font-bold">
-              Pay with multiple credit cards
-            </span>
-            <Circle className="w-3 h-3" />
-            <span className="text-5xl font-bold">Save up to 50% off</span>
-          </div>
-        </div>
-
-        {/* fade edges */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-linear-to-r from-white"></div>
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-linear-to-l from-white"></div>
-      </div>
-
-      <Collections />
     </main>
   );
 }
