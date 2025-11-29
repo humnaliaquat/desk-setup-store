@@ -20,7 +20,7 @@ export default function BestSeller() {
           Featured <span className="text-orange-400">Products</span>
         </h1>
         <p className="text-gray-600 max-w-lg text-sm md:text-base">
-          Build your dream workspace with curated setups and accessories.
+          Timeless design meets ultimate functionality for your desk.
         </p>
       </div>
       <div className="grid grid-cols-4 gap-6 ">

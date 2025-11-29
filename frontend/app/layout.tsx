@@ -3,6 +3,7 @@ import "./globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { DM_Serif_Display } from "next/font/google";
 import Navbar from "./componenets/layout/Navbar";
+import Footer from "./componenets/layout/Footer";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
         </div>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

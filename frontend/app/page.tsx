@@ -9,6 +9,8 @@ import Collections from "./componenets/homePageItems/Collections";
 import AISection from "./componenets/homePageItems/AISection";
 import CollectionSec from "./componenets/homePageItems/CollectionSec";
 import BestSeller from "./componenets/homePageItems/BestSeller";
+import BlogSec from "./componenets/homePageItems/BlogSec";
+import Divider from "./componenets/homePageItems/Divider";
 
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
@@ -17,7 +19,7 @@ const dmSerif = DM_Serif_Display({
 
 export default function Home() {
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col ">
       <div className="w-full h-[500px] relative overflow-hidden">
         {/* Navbar */}
         <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent z-1" />
@@ -82,6 +84,8 @@ export default function Home() {
 
       <AISection />
       <FeaturedProducts />
+      <Divider />
+      <BlogSec />
     </main>
   );
 }

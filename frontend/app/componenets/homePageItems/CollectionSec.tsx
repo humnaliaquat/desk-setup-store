@@ -8,8 +8,7 @@ export default function CollectionSec() {
       {/* Heading */}
       <div className="flex flex-col items-center text-center mb-12">
         <h1 className="text-3xl md:text-5xl font-semibold mb-2">
-          Design{" "}
-          <span className="text-orange-400 font-extrabold">Inspires</span>
+          Premium <span className="text-orange-400 font-extrabold">Picks</span>
         </h1>
         <p className="text-gray-600 max-w-lg text-sm md:text-base">
           Build your dream workspace with curated setups and accessories.
