@@ -21,7 +21,7 @@ export default function Divider() {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden bg-white border-y border-gray-300 mt-10 mb-16">
+    <div className="w-full overflow-hidden bg-white border-y border-gray-300 mt-10 mb-12">
       <motion.div
         ref={containerRef}
         className="flex"
