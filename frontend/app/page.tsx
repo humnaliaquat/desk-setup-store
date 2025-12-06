@@ -85,7 +85,11 @@ export default function Home() {
       <AISection />
       <FeaturedProducts />
       <Divider />
-      <BlogSec />
+      <BlogSec
+        title="The Deskio"
+        highlight="Blog"
+        subtitle="Stories, guides, and insights to elevate your workspace experience."
+      />
     </main>
   );
 }

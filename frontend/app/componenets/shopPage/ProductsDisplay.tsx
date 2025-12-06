@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import keyboard from "@/public/products/keyboard/AulaGreen.jpg";
 import ProductCard from "./ProductCard";
+import Link from "next/link";
 
 interface IconProps {
   active: boolean;
@@ -31,6 +32,7 @@ interface ProductType {
   pic: any;
   name: string;
   price: string;
+  id?: number;
 }
 
 /* ─────────────────────────────── */
@@ -40,14 +42,14 @@ export default function ProductsDisplay() {
   const [sortValue, setSortValue] = useState<string>("popularity");
 
   const data: ProductType[] = [
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 1, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 2, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 3, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 4, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 5, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 6, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 7, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
+    { id: 8, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
   ];
 
   return (
@@ -103,7 +105,9 @@ export default function ProductsDisplay() {
           }`}
         >
           {data.map((p, i) => (
-            <ProductCard key={i} {...p} />
+            <Link key={p.id} href={`/store/${p.id}`}>
+              <ProductCard {...p} />
+            </Link>
           ))}
         </div>
       </main>

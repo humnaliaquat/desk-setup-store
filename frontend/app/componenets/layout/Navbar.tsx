@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { ShoppingCart, Heart, UserRound, Search } from "lucide-react";
+import Link from "next/link";
 
 function Navbar() {
   return (
@@ -12,14 +13,42 @@ function Navbar() {
         </h1>
 
         <ul className="hidden md:flex space-x-10 md:space-x-14 text-sm font-bold">
-          <li className="cursor-pointer hover:text-gray-600 nav-link">HOME</li>
-          <li className="cursor-pointer hover:text-gray-600 nav-link">
-            PRODUCTS
-          </li>
-          <li className="cursor-pointer hover:text-gray-600 nav-link">ABOUT</li>
-          <li className="cursor-pointer hover:text-gray-600 nav-link">
-            CONTACT
-          </li>
+          <Link
+            href={"/"}
+            className="cursor-pointer hover:text-gray-600 nav-link"
+          >
+            HOME
+          </Link>
+          <Link
+            href={"/store"}
+            className="cursor-pointer hover:text-gray-600 nav-link"
+          >
+            STORE
+          </Link>
+          <Link
+            href={"/collection"}
+            className="cursor-pointer hover:text-gray-600 nav-link"
+          >
+            COLLECTION
+          </Link>
+          <Link
+            href={"/ai-setup"}
+            className="cursor-pointer hover:text-gray-600 nav-link"
+          >
+            AI SETUP
+          </Link>
+          <Link
+            href={"/blog"}
+            className="cursor-pointer hover:text-gray-600 nav-link"
+          >
+            BLOG
+          </Link>
+          <Link
+            href={"/about"}
+            className="cursor-pointer hover:text-gray-600 nav-link"
+          >
+            ABOUT
+          </Link>
         </ul>
       </div>
 
@@ -27,13 +56,13 @@ function Navbar() {
       <div className="flex items-center space-x-4 text-black">
         <Search className="h-5 w-5 cursor-pointer" />
 
-        <button className="p-2 hover:bg-gray-100 rounded-md">
+        <Link href={"/checkout"} className="p-2 hover:bg-gray-100 rounded-md">
           <ShoppingCart className="h-5 w-5" />
-        </button>
+        </Link>
 
-        <button className="p-2 hover:bg-gray-100 rounded-md">
+        <Link href={"/wishlist"} className="p-2 hover:bg-gray-100 rounded-md">
           <Heart className="h-5 w-5" />
-        </button>
+        </Link>
 
         <button className="p-2 hover:bg-gray-100 rounded-md">
           <UserRound className="h-5 w-5" />
