@@ -56,7 +56,7 @@ function Navbar() {
       <div className="flex items-center space-x-4 text-black">
         <Search className="h-5 w-5 cursor-pointer" />
 
-        <Link href={"/checkout"} className="p-2 hover:bg-gray-100 rounded-md">
+        <Link href={"/cart"} className="p-2 hover:bg-gray-100 rounded-md">
           <ShoppingCart className="h-5 w-5" />
         </Link>
 
