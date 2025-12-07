@@ -6,7 +6,7 @@ import operationsManager from "@/public/aboutUsPics/liam.jpg";
 
 export default function MeetTeam() {
   return (
-    <div className="flex flex-col items-center gap-8 px-4 sm:px-16 bg-white mt-16">
+    <div className="flex flex-col items-center gap-8 px-4 sm:px-16 bg-white mt-10">
       <div className="text-center flex flex-col gap-4 items-center">
         <p className="flex items-center gap-3 font-medium text-lg">
           <span className="w-3 h-1 bg-orange-400"></span>Our Team

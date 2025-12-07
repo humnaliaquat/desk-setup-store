@@ -4,7 +4,7 @@ import MainSec from "../componenets/about-us/MainSec";
 
 export default function page() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {" "}
       {/* HEADER */}
       <header className="flex flex-col justify-center items-center h-[200px] md:h-[250px] px-4">

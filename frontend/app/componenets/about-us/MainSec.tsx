@@ -3,6 +3,7 @@ import Image from "next/image";
 import image1 from "@/public/aboutUsPics/teamOnWork.jpg";
 import image2 from "@/public/aboutUsPics/teamwork.jpg";
 import image3 from "@/public/aboutUsPics/topview.jpg";
+import behindTheScene from "@/public/aboutUsPicS/behindTheScenes.jpg";
 import MeetTeam from "./MeetTeam";
 import { Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 
@@ -27,7 +28,7 @@ export default function MainSec() {
   ];
 
   return (
-    <section className="flex flex-col items-center gap-16 px-4 sm:px-8 md:px-16 lg:px-64 bg-white py-13">
+    <section className="flex flex-col items-center gap-10 px-4 sm:px-8 md:px-16 lg:px-64 bg-white py-13">
       {/* Text Content */}
       <div className="flex flex-col items-center gap-6 text-center">
         <p className="flex items-center gap-3 font-medium text-lg">
@@ -87,7 +88,7 @@ export default function MainSec() {
       </div>
 
       {/* Divider Section */}
-      <div className="bg-orange-400 text-white flex flex-wrap justify-around items-center w-full px-6 md:px-16 py-8 rounded-lg shadow-lg gap-8">
+      <div className="bg-orange-400 text-white flex flex-wrap justify-around items-center w-full max-w-3xl px-6 md:px-16 py-4 rounded-lg shadow-lg gap-8">
         {[
           { value: "5+", label: "Years" },
           { value: "5000+", label: "Happy Clients" },
@@ -99,6 +100,54 @@ export default function MainSec() {
             <p className="text-sm sm:text-base">{stat.label}</p>
           </div>
         ))}
+      </div>
+      <div className="grid grid-cols-2 max-w-3xl gap-8 mt-10 ">
+        {/* image  */}
+
+        <div className=" w-full">
+          <Image
+            src={behindTheScene}
+            alt="Behind The Scene"
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+
+        {/* features  */}
+        <div className="px-6">
+          <p className="flex items-center gap-3 font-medium text-lg">
+            <span className="w-3 h-1 bg-orange-400"></span>
+            Why Choose Deskio
+          </p>
+
+          <h2 className="text-3xl font-bold mb-6">
+            Smart Workspaces Built For Comfort & Performance
+          </h2>
+
+          <p>
+            We design desks that don’t just look good they help you stay
+            focused, organized, and comfortable through long work sessions.
+            Here’s what sets us apart:
+          </p>
+
+          <ul className="list-disc list-inside mt-4 space-y-2">
+            <li>
+              <strong>Ergonomic Engineering:</strong> Thoughtfully crafted to
+              reduce fatigue, support posture, and keep you productive all day.
+            </li>
+            <li>
+              <strong>High-Grade Materials:</strong> Built with durable surfaces
+              and sturdy frames that last through years of daily use.
+            </li>
+            <li>
+              <strong>Personalized Setup:</strong> Multiple sizes, colors, cable
+              solutions, drawers, and add-ons to match your workflow and style.
+            </li>
+            <li>
+              <strong>Trusted Support:</strong> Fast, friendly customer service
+              with real guidance before and after your purchase.
+            </li>
+          </ul>
+        </div>
       </div>
 
       {/* Team Section */}
