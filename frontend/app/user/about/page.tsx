@@ -1,6 +1,7 @@
+"use client";
 import Link from "next/link";
 import React from "react";
-import MainSec from "../componenets/about-us/MainSec";
+import MainSec from "../../componenets/about-us/MainSec";
 
 export default function page() {
   return (

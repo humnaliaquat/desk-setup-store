@@ -1,3 +1,4 @@
+"use client";
 import blogsData from "@/db/blogs.json";
 import Image from "next/image";
 import auther from "@/public/covers/woman.jpg";

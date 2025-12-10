@@ -14,37 +14,37 @@ function Navbar() {
 
         <ul className="hidden md:flex space-x-10 md:space-x-14 text-sm font-bold">
           <Link
-            href={"/"}
+            href={"/user"}
             className="cursor-pointer hover:text-gray-600 nav-link"
           >
             HOME
           </Link>
           <Link
-            href={"/store"}
+            href={"/user/store"}
             className="cursor-pointer hover:text-gray-600 nav-link"
           >
             STORE
           </Link>
           <Link
-            href={"/collection"}
+            href={"/user/collection"}
             className="cursor-pointer hover:text-gray-600 nav-link"
           >
             COLLECTION
           </Link>
           <Link
-            href={"/ai-setup"}
+            href={"/user/ai-setup"}
             className="cursor-pointer hover:text-gray-600 nav-link"
           >
             AI SETUP
           </Link>
           <Link
-            href={"/blog"}
+            href={"/user/blog"}
             className="cursor-pointer hover:text-gray-600 nav-link"
           >
             BLOG
           </Link>
           <Link
-            href={"/about"}
+            href={"/user/about"}
             className="cursor-pointer hover:text-gray-600 nav-link"
           >
             ABOUT
@@ -56,11 +56,14 @@ function Navbar() {
       <div className="flex items-center space-x-4 text-black">
         <Search className="h-5 w-5 cursor-pointer" />
 
-        <Link href={"/cart"} className="p-2 hover:bg-gray-100 rounded-md">
+        <Link href={"/user/cart"} className="p-2 hover:bg-gray-100 rounded-md">
           <ShoppingCart className="h-5 w-5" />
         </Link>
 
-        <Link href={"/wishlist"} className="p-2 hover:bg-gray-100 rounded-md">
+        <Link
+          href={"/user/wishlist"}
+          className="p-2 hover:bg-gray-100 rounded-md"
+        >
           <Heart className="h-5 w-5" />
         </Link>
 

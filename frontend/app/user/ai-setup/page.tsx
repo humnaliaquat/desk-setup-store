@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import Form from "../componenets/ai-setup/Form";
+import Form from "../../componenets/ai-setup/Form";
 
 export default function AiSetupPage() {
   return (

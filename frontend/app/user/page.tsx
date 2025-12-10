@@ -1,16 +1,16 @@
 "use client";
 import Image from "next/image";
 import { MoveRight, Circle } from "lucide-react";
-import setup from "../public/covers/setup.jpg";
+import setup from "../../public/covers/setup.jpg";
 import { DM_Serif_Display } from "next/font/google";
-import CategoriesSection from "./componenets/homePageItems/CategoriesSection";
-import FeaturedProducts from "./componenets/homePageItems/FeaturedProducts";
-import Collections from "./componenets/homePageItems/Collections";
-import AISection from "./componenets/homePageItems/AISection";
-import CollectionSec from "./componenets/homePageItems/CollectionSec";
-import BestSeller from "./componenets/homePageItems/BestSeller";
-import BlogSec from "./componenets/homePageItems/BlogSec";
-import Divider from "./componenets/homePageItems/Divider";
+import CategoriesSection from "@/app/componenets/homePageItems/CategoriesSection";
+import FeaturedProducts from "@/app/componenets/homePageItems/FeaturedProducts";
+import Collections from "@/app/componenets/homePageItems/Collections";
+import AISection from "@/app/componenets/homePageItems/AISection";
+import CollectionSec from "@/app/componenets/homePageItems/CollectionSec";
+import BestSeller from "@/app/componenets/homePageItems/BestSeller";
+import BlogSec from "@/app/componenets/homePageItems/BlogSec";
+import Divider from "@/app/componenets/homePageItems/Divider";
 
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],

@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import Image from "next/image";
 import { Truck, RotateCcw, Headphones, ShieldCheck } from "lucide-react";
 

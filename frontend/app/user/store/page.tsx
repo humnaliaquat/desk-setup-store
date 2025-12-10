@@ -1,7 +1,7 @@
 import { Filter } from "lucide-react";
 import React from "react";
-import FiltersSidebar from "../componenets/shopPage/FiltersSidebar";
-import ProductsDisplay from "../componenets/shopPage/ProductsDisplay";
+import FiltersSidebar from "../../componenets/shopPage/FiltersSidebar";
+import ProductsDisplay from "../../componenets/shopPage/ProductsDisplay";
 
 export default function page() {
   return (
