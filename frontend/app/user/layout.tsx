@@ -1,8 +1,8 @@
 // app/user/layout.tsx
 import "@/app/globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import Navbar from "@/app/componenets/layout/Navbar";
-import Footer from "@/app/componenets/layout/Footer";
+import Navbar from "@/app/componenets/userLayout/Navbar";
+import Footer from "@/app/componenets/userLayout/Footer";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -15,8 +15,8 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={jakarta.className}>
-      <body>
+    <div className={jakarta.className}>
+      <div>
         {/* Optional top banner */}
         <div className="flex justify-center text-white font-medium py-2.5 items-center bg-orange-400 text-xs">
           <h1 className="text-sm">
@@ -33,7 +33,7 @@ export default function UserLayout({
 
         {/* Footer */}
         <Footer />
-      </body>
-    </html>
+      </div>
+    </div>
   );
 }

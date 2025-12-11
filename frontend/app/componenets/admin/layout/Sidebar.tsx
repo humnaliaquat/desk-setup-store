@@ -10,7 +10,7 @@ export default function Sidebar() {
   const [openProducts, setOpenProducts] = useState(false);
 
   return (
-    <aside className="w-64 bg-gray-900 text-white min-h-screen p-4 flex flex-col">
+    <aside className="w-64 bg-white text-white min-h-screen p-4 flex flex-col">
       <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
 
       {/* Dashboard */}

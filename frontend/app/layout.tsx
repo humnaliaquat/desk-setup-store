@@ -1,19 +1,14 @@
-// /app/admin/layout.tsx
-import "@/app/globals.css";
-export default function AdminLayout({
+// app/layout.tsx
+import "./globals.css";
+
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // or spinner
-
   return (
     <html lang="en">
-      <body>
-        <div className="flex min-h-screen">
-          <main className="">{children}</main>
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
