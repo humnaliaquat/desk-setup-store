@@ -15,17 +15,17 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`flex min-h-screen bg-gray-100 ${jakarta.className}`}>
+    <div className={`min-h-screen bg-gray-100 ${jakarta.className}`}>
       {/* SIDEBAR */}
       <Sidebar />
 
-      {/* MAIN SECTION */}
-      <div className="flex flex-col flex-1">
+      {/* MAIN CONTENT */}
+      <div className="ml-64 flex min-h-screen flex-col">
         {/* NAVBAR */}
         <Navbar />
 
         {/* PAGE CONTENT */}
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto  pt-15">{children}</main>
       </div>
     </div>
   );

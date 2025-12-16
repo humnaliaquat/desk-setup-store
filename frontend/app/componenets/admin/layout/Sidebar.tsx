@@ -2,90 +2,114 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { Home, Box, ShoppingCart, Users, Settings, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Home,
+  Box,
+  ShoppingCart,
+  Users,
+  Settings,
+  Plus,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
 export default function Sidebar() {
   const path = usePathname();
   const [openProducts, setOpenProducts] = useState(false);
 
-  return (
-    <aside className="w-64 bg-white text-white min-h-screen p-4 flex flex-col">
-      <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
+  // auto-open products if user is on products route
+  useEffect(() => {
+    if (path.startsWith("/admin/products")) {
+      setOpenProducts(true);
+    }
+  }, [path]);
 
-      {/* Dashboard */}
+  const active = "bg-gray-100 text-black border-l-4 border-orange-400";
+
+  const base =
+    "flex items-center gap-3 px-4 py-2 rounded-md mb-1 font-medium transition hover:bg-gray-100";
+
+  return (
+    <aside className="fixed left-0 top-0 w-64 bg-white text-gray-500 min-h-screen p-4 flex flex-col ">
+      {/* LOGO */}
+      <div className="flex items-center gap-3 font-bold text-lg text-black mb-8">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-400 text-sm text-white">
+          D
+        </div>
+        DESKIO
+      </div>
+
+      {/* DASHBOARD */}
       <Link
         href="/admin"
-        className={`flex items-center gap-2 px-4 py-2 rounded mb-2 hover:bg-gray-800 ${
-          path === "/admin" ? "bg-gray-700" : ""
-        }`}
+        className={`${base} ${path === "/admin" ? active : ""}`}
       >
         <Home size={18} />
         Dashboard
       </Link>
 
-      {/* Products */}
+      {/* PRODUCTS */}
       <button
         onClick={() => setOpenProducts(!openProducts)}
-        className={`flex items-center gap-2 px-4 py-2 rounded mb-2 w-full hover:bg-gray-800 ${
-          path.startsWith("/admin/products") ? "bg-gray-700" : ""
+        className={`${base} w-full ${
+          path.startsWith("/admin/products") ? active : ""
         }`}
       >
         <Box size={18} />
         Products
-        <span className="ml-auto">{openProducts ? "▲" : "▼"}</span>
+        <span className="ml-auto">
+          {openProducts ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </span>
       </button>
 
-      {openProducts && (
-        <div className="ml-6 flex flex-col">
-          <Link
-            href="/admin/products"
-            className={`px-4 py-1 rounded mb-1 hover:bg-gray-800 ${
-              path === "/admin/products" ? "bg-gray-700" : ""
-            }`}
-          >
-            All Products
-          </Link>
-          <Link
-            href="/admin/products/add"
-            className={`px-4 py-1 rounded mb-1 hover:bg-gray-800 ${
-              path === "/admin/products/add" ? "bg-gray-700" : ""
-            }`}
-          >
-            <Plus size={14} className="inline mr-1" />
-            Add Product
-          </Link>
-        </div>
-      )}
+      <div
+        className={`ml-6 overflow-hidden transition-all duration-300 ${
+          openProducts ? "max-h-40" : "max-h-0"
+        }`}
+      >
+        <Link
+          href="/admin/products"
+          className={`block px-4 py-1.5 rounded-md text-sm hover:bg-gray-100 ${
+            path === "/admin/products" ? "text-black font-semibold" : ""
+          }`}
+        >
+          All Products
+        </Link>
 
-      {/* Orders */}
+        <Link
+          href="/admin/products/add"
+          className={`flex items-center gap-1 px-4 py-1.5 rounded-md text-sm hover:bg-gray-100 ${
+            path === "/admin/products/add" ? "text-black font-semibold" : ""
+          }`}
+        >
+          <Plus size={14} />
+          Add Product
+        </Link>
+      </div>
+
+      {/* ORDERS */}
       <Link
         href="/admin/orders"
-        className={`flex items-center gap-2 px-4 py-2 rounded mb-2 hover:bg-gray-800 ${
-          path === "/admin/orders" ? "bg-gray-700" : ""
-        }`}
+        className={`${base} ${path === "/admin/orders" ? active : ""}`}
       >
         <ShoppingCart size={18} />
         Orders
       </Link>
 
-      {/* Users */}
+      {/* USERS */}
       <Link
         href="/admin/users"
-        className={`flex items-center gap-2 px-4 py-2 rounded mb-2 hover:bg-gray-800 ${
-          path === "/admin/users" ? "bg-gray-700" : ""
-        }`}
+        className={`${base} ${path === "/admin/users" ? active : ""}`}
       >
         <Users size={18} />
         Users
       </Link>
 
-      {/* Settings */}
+      {/* SETTINGS */}
       <Link
         href="/admin/settings"
-        className={`flex items-center gap-2 px-4 py-2 rounded mb-2 hover:bg-gray-800 ${
-          path === "/admin/settings" ? "bg-gray-700" : ""
-        }`}
+        className={`${base} ${path === "/admin/settings" ? active : ""}`}
       >
         <Settings size={18} />
         Settings
