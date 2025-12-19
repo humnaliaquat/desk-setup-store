@@ -43,7 +43,9 @@ export default function Sidebar() {
       {/* DASHBOARD */}
       <Link
         href="/admin"
-        className={`${base} ${path === "/admin" ? active : ""}`}
+        className={`${base} ${
+          path === "/admin" ? active : "border-l-4 border-transparent"
+        }`}
       >
         <Home size={18} />
         Dashboard
@@ -52,13 +54,15 @@ export default function Sidebar() {
       {/* PRODUCTS */}
       <button
         onClick={() => setOpenProducts(!openProducts)}
-        className={`${base} w-full ${
-          path.startsWith("/admin/products") ? active : ""
+        className={`${base} w-full cursor-pointer ${
+          path.startsWith("/admin/products")
+            ? active
+            : "border-l-4 border-transparent"
         }`}
       >
         <Box size={18} />
         Products
-        <span className="ml-auto">
+        <span className="ml-auto cursor-pointer">
           {openProducts ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </span>
       </button>
@@ -91,7 +95,9 @@ export default function Sidebar() {
       {/* ORDERS */}
       <Link
         href="/admin/orders"
-        className={`${base} ${path === "/admin/orders" ? active : ""}`}
+        className={`${base} ${
+          path === "/admin/orders" ? active : "border-l-4 border-transparent"
+        }`}
       >
         <ShoppingCart size={18} />
         Orders
@@ -100,7 +106,9 @@ export default function Sidebar() {
       {/* USERS */}
       <Link
         href="/admin/users"
-        className={`${base} ${path === "/admin/users" ? active : ""}`}
+        className={`${base} ${
+          path === "/admin/users" ? active : "border-l-4 border-transparent"
+        }`}
       >
         <Users size={18} />
         Users
@@ -109,7 +117,9 @@ export default function Sidebar() {
       {/* SETTINGS */}
       <Link
         href="/admin/settings"
-        className={`${base} ${path === "/admin/settings" ? active : ""}`}
+        className={`${base} ${
+          path === "/admin/settings" ? active : "border-l-4 border-transparent"
+        }`}
       >
         <Settings size={18} />
         Settings
