@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEvent, DragEvent, useState } from "react";
 import {
   Images,
   UploadCloud,
@@ -10,58 +10,203 @@ import {
   Plus,
   Trash2,
   Info,
+  Loader2,
 } from "lucide-react";
 import { format } from "date-fns";
+import axios from "axios";
+
+type Product = {
+  name: string;
+  description: string;
+  tags: string[];
+  category: string;
+  price: number;
+  images: File[];
+  dateAdded?: string;
+};
 
 export default function AddProduct() {
+  const [product, setProduct] = useState<Product>({
+    name: "",
+    description: "",
+    price: 0,
+    category: "",
+    images: [],
+    tags: [],
+  });
+
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [tags, setTags] = useState<string[]>(["mechanical", "rgb", "wireless"]);
   const [newTag, setNewTag] = useState("");
-  const [description, setDescription] = useState(
-    "Premium mechanical keyboard with hot-swappable switches, RGB backlighting, and aluminum frame. Perfect for typing and gaming."
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
-  // Simulated uploaded images
-  const [uploadedImages] = useState([
-    { id: 1, name: "keyboard-front.jpg", size: "2.4 MB" },
-    { id: 2, name: "keyboard-side.jpg", size: "1.8 MB" },
-    { id: 3, name: "keyboard-top.jpg", size: "3.1 MB" },
-  ]);
+  // Handle image selection via input
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
 
+    const files = Array.from(e.target.files);
+    const validFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    if (validFiles.length !== files.length) {
+      setMessage({ type: "error", text: "Only image files are allowed." });
+    }
+
+    setProduct((prev) => ({
+      ...prev,
+      images: [...prev.images, ...validFiles].slice(0, 10), // Limit to 10 images
+    }));
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!e.dataTransfer.files) return;
+
+    const files = Array.from(e.dataTransfer.files);
+    const validFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    setProduct((prev) => ({
+      ...prev,
+      images: [...prev.images, ...validFiles].slice(0, 10),
+    }));
+  };
+
+  // Remove image
+  const removeImage = (index: number) => {
+    setProduct((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Add tag on Enter
   const addTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTag.trim()) {
       e.preventDefault();
       const trimmed = newTag.trim().toLowerCase();
-      if (trimmed && !tags.includes(trimmed)) {
-        setTags([...tags, trimmed]);
+      if (!product.tags.includes(trimmed)) {
+        setProduct((prev) => ({
+          ...prev,
+          tags: [...prev.tags, trimmed],
+        }));
       }
       setNewTag("");
     }
   };
 
-  const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+  // Remove tag
+  const removeTag = (tag: string) => {
+    setProduct((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((t) => t !== tag),
+    }));
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // Handle input changes
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    if (name === "price") {
+      setProduct((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
+    } else {
+      setProduct((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // In real app: handle files here
+  // Submit product to backend
+  const handleSubmit = async () => {
+    if (
+      !product.name ||
+      !product.category ||
+      product.price <= 0 ||
+      !product.description
+    ) {
+      setMessage({
+        type: "error",
+        text: "Please fill in all required fields.",
+      });
+      return;
+    }
+
+    if (product.images.length === 0) {
+      setMessage({ type: "error", text: "Please upload at least one image." });
+      return;
+    }
+
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const formData = new FormData();
+
+      formData.append("name", product.name);
+      formData.append("description", product.description);
+      formData.append("price", product.price.toString());
+      formData.append("category", product.category);
+      formData.append("dateAdded", format(selectedDate, "yyyy-MM-dd"));
+
+      product.tags.forEach((tag) => {
+        formData.append("tags[]", tag);
+      });
+
+      product.images.forEach((file) => {
+        formData.append("images", file); // MUST match multer key
+      });
+
+      await axios.post("http://localhost:5000/api/products", formData);
+
+      setMessage({ type: "success", text: "Product successfully added!" });
+
+      setProduct({
+        name: "",
+        description: "",
+        price: 0,
+        category: "",
+        images: [],
+        tags: [],
+      });
+    } catch (err: any) {
+      setMessage({
+        type: "error",
+        text: err.response?.data?.message || "Upload failed",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-10">
         <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
-        <p className="text-gray-600  text-sm">
+        <p className="text-gray-600 text-sm">
           Fill in the details to list a new product in your store.
         </p>
       </div>
+
+      {message && (
+        <div
+          className={`mb-6 p-4 rounded-xl flex items-center gap-3 ${
+            message.type === "success"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          <Info size={20} />
+          <span>{message.text}</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left: Image Upload Section */}
@@ -72,51 +217,68 @@ export default function AddProduct() {
               Product Images
             </h2>
             <span className="text-sm font-medium text-gray-500">
-              {uploadedImages.length} images
+              {product.images.length}{" "}
+              {product.images.length === 1 ? "image" : "images"}
             </span>
           </div>
 
-          {/* Drag & Drop Zone */}
           <div
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-gray-400 hover:bg-gray-50 transition cursor-pointer group"
           >
-            <UploadCloud className="w-14 h-14 text-gray-400 mx-auto mb-4 group-hover:text-gray-600 transition" />
-            <p className="text-lg font-medium text-gray-700 mb-2">
-              Drop images here or{" "}
-              <span className="text-blue-600 font-semibold hover:underline">
-                browse
-              </span>
-            </p>
-            <p className="text-sm text-gray-500">
-              JPG, PNG, WebP • Up to 10MB each • At least 800x800px recommended
-            </p>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              hidden
+              id="imageUpload"
+              onChange={handleImageChange}
+            />
+            <label htmlFor="imageUpload" className="cursor-pointer">
+              <UploadCloud className="w-16 h-16 mx-auto text-gray-400 group-hover:text-gray-600 transition" />
+              <p className="text-lg font-medium text-gray-700 mt-4 mb-2">
+                Drop images here or{" "}
+                <span className="text-blue-600 font-semibold hover:underline">
+                  browse
+                </span>
+              </p>
+              <p className="text-sm text-gray-500">
+                JPG, PNG, WebP • Up to 10MB each • Max 10 images
+              </p>
+            </label>
           </div>
 
           {/* Image Previews */}
-          {uploadedImages.length > 0 && (
+          {product.images.length > 0 && (
             <div className="mt-6 space-y-4">
               <p className="text-sm font-medium text-gray-700">
                 Uploaded Images
               </p>
-              {uploadedImages.map((img) => (
+              {product.images.map((img, index) => (
                 <div
-                  key={img.id}
+                  key={index}
                   className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-gray-200 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center shrink-0">
-                      <Images className="w-8 h-8 text-gray-500" />
+                    <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden shrink-0">
+                      <img
+                        src={URL.createObjectURL(img)}
+                        alt={img.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div>
                       <p className="font-medium text-gray-900 truncate max-w-xs">
                         {img.name}
                       </p>
-                      <p className="text-sm text-gray-500">{img.size}</p>
+                      <p className="text-sm text-gray-500">
+                        {(img.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
                     </div>
                   </div>
                   <button
+                    onClick={() => removeImage(index)}
                     aria-label="Remove image"
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                   >
@@ -144,10 +306,13 @@ export default function AddProduct() {
                 Product Name <span className="text-red-500">*</span>
               </label>
               <input
+                name="name"
                 id="name"
                 type="text"
+                value={product.name}
+                onChange={handleChange}
                 placeholder="e.g. Keychron K2 Mechanical Keyboard"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
 
@@ -160,7 +325,10 @@ export default function AddProduct() {
                 Category <span className="text-red-500">*</span>
               </label>
               <select
+                name="category"
                 id="category"
+                value={product.category}
+                onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               >
                 <option value="">Select a category</option>
@@ -185,10 +353,13 @@ export default function AddProduct() {
                   $
                 </span>
                 <input
+                  name="price"
                   id="price"
                   type="number"
                   step="0.01"
                   min="0"
+                  value={product.price || ""}
+                  onChange={handleChange}
                   placeholder="99.99"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                 />
@@ -219,14 +390,15 @@ export default function AddProduct() {
                   Description <span className="text-red-500">*</span>
                 </label>
                 <span className="text-xs text-gray-500">
-                  {description.length}/1000
+                  {product.description.length}/1000
                 </span>
               </div>
               <textarea
+                name="description"
                 id="description"
                 rows={6}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={product.description}
+                onChange={handleChange}
                 placeholder="Describe your product: features, materials, compatibility, benefits..."
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none transition"
                 maxLength={1000}
@@ -245,12 +417,12 @@ export default function AddProduct() {
               </label>
 
               <div className="flex flex-wrap gap-2 mb-4">
-                {tags.length === 0 ? (
+                {product.tags.length === 0 ? (
                   <p className="text-sm text-gray-500 italic">
                     No tags added yet
                   </p>
                 ) : (
-                  tags.map((tag) => (
+                  product.tags.map((tag) => (
                     <span
                       key={tag}
                       className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium hover:bg-blue-200 transition"
@@ -281,12 +453,30 @@ export default function AddProduct() {
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-4 mt-10 pt-6 border-t border-gray-200">
-            <button className="px-6 py-3.5 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition">
+            <button
+              type="button"
+              disabled={isLoading}
+              className="px-6 py-3.5 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
+            >
               Cancel
             </button>
-            <button className="px-8 py-3.5 bg-black text-white rounded-xl font-medium hover:bg-gray-800 transition flex items-center gap-2 shadow-md">
-              <Plus size={20} />
-              Publish Product
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="px-8 py-3.5 bg-black text-white rounded-xl font-medium hover:bg-gray-800 transition flex items-center gap-2 shadow-md disabled:opacity-50"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Publishing...
+                </>
+              ) : (
+                <>
+                  <Plus size={20} />
+                  Publish Product
+                </>
+              )}
             </button>
           </div>
         </div>
