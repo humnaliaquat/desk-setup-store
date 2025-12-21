@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import {
   Plus,
@@ -9,6 +10,10 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
+  Package,
+  CheckCircle,
+  AlertCircle,
+  ShoppingBag,
 } from "lucide-react";
 
 const products = [
@@ -19,6 +24,7 @@ const products = [
     variants: 3,
     inventory: 120,
     date: "2024-11-12",
+    image: "/keyboard.jpg",
   },
   {
     id: 2,
@@ -27,6 +33,7 @@ const products = [
     variants: 2,
     inventory: 80,
     date: "2024-10-05",
+    image: "/mouse.jpg",
   },
   {
     id: 3,
@@ -35,8 +42,8 @@ const products = [
     variants: 5,
     inventory: 40,
     date: "2024-09-21",
+    image: "/desmat.jpg",
   },
-  // Add more products to demonstrate pagination (total 12 for example)
   {
     id: 4,
     name: "RGB Gaming Mousepad",
@@ -44,6 +51,7 @@ const products = [
     variants: 1,
     inventory: 65,
     date: "2024-08-15",
+    image: "/mousepad.jpg",
   },
   {
     id: 5,
@@ -52,8 +60,9 @@ const products = [
     variants: 4,
     inventory: 15,
     date: "2024-07-20",
+    image: "/chair.jpg",
   },
-  // ... imagine more items up to 12+
+  // Add more for testing pagination...
 ];
 
 const ITEMS_PER_PAGE = 5;
@@ -61,103 +70,96 @@ const ITEMS_PER_PAGE = 5;
 export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
+  const totalProducts = products.length;
+  const activeProducts = products.filter((p) => p.status === "Active").length;
+  const draftProducts = products.filter((p) => p.status === "Draft").length;
+  const lowStock = products.filter((p) => p.inventory < 50).length;
+
+  const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedProducts = products.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  const stats = [
+    {
+      title: "Total Products",
+      value: totalProducts,
+      icon: Package,
+      color: "blue",
+    },
+    {
+      title: "Active Listings",
+      value: activeProducts,
+      icon: CheckCircle,
+      color: "green",
+    },
+    {
+      title: "Draft Products",
+      value: draftProducts,
+      icon: AlertCircle,
+      color: "yellow",
+    },
+    {
+      title: "Low Stock Alert",
+      value: lowStock,
+      icon: ShoppingBag,
+      color: "red",
+    },
+  ];
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div>
-          <label
-            htmlFor="category"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Category
-          </label>
-          <select
-            id="category"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option>All Categories</option>
-            <option>Keyboards</option>
-            <option>Mice</option>
-            <option>Desk Mats</option>
-            <option>Lamps</option>
-          </select>
-        </div>
+      {/* Header */}
+      <header className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">All Products</h1>
+        <p className="text-gray-600 text-sm">
+          Manage your store inventory and listings
+        </p>
+      </header>
 
-        <div>
-          <label
-            htmlFor="brand"
-            className="block text-sm font-medium text-gray-700 mb-1"
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {stats.map((stat) => (
+          <div
+            key={stat.title}
+            className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
           >
-            Brand
-          </label>
-          <select
-            id="brand"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option>All Brands</option>
-            <option>Logitech</option>
-            <option>Keychron</option>
-            <option>Razer</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            htmlFor="status"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Status
-          </label>
-          <select
-            id="status"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Draft</option>
-          </select>
-        </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">{stat.title}</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">
+                  {stat.value}
+                </p>
+              </div>
+              <div className={`p-3 rounded-xl bg-${stat.color}-100`}>
+                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Main Card */}
+      {/* Main Table Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        {/* Header */}
+        {/* Table Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 border-b border-gray-200">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">All Products</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              {products.length} products
-            </p>
+          <div className="relative w-full sm:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input
+              type="search"
+              placeholder="Search products..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+            />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="search"
-                placeholder="Search products..."
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
-              />
-            </div>
-
-            <button className="flex items-center justify-center gap-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
+          <div className="flex gap-3 w-full sm:w-auto">
+            <button className="flex items-center gap-2 px-5 py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition cursor-pointer">
               <ArrowUpDown size={18} />
               Sort
             </button>
-
-            <button className="flex items-center justify-center gap-2 bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition">
+            <button className="flex items-center gap-2 px-6 py-2 bg-black text-white rounded-full hover:brightness-125 transition shadow-md cursor-pointer">
               <Plus size={18} />
               Add Product
             </button>
@@ -202,8 +204,14 @@ export default function ProductsPage() {
                     />
                   </td>
                   <td className="px-6 py-4">
-                    <div className="font-medium text-gray-900">
-                      {product.name}
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden shrink-0">
+                        <div className="w-full h-full bg-gray-300 border-2 border-dashed border-gray-400" />
+                        {/* Replace with real image: <img src={product.image} alt="" className="object-cover" /> */}
+                      </div>
+                      <div className="font-medium text-gray-900">
+                        {product.name}
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -217,32 +225,40 @@ export default function ProductsPage() {
                       {product.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-gray-600">
+                  <td className="px-6 py-4 text-gray-700">
                     {product.variants}
                   </td>
-                  <td className="px-6 py-4 text-gray-600">
-                    {product.inventory}
+                  <td className="px-6 py-4">
+                    <span
+                      className={
+                        product.inventory < 50
+                          ? "text-red-600 font-medium"
+                          : "text-gray-700"
+                      }
+                    >
+                      {product.inventory}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 text-gray-600 text-sm">
+                  <td className="px-6 py-4 text-sm text-gray-600">
                     {product.date}
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex justify-end items-center gap-3">
+                    <div className="flex justify-end gap-3">
                       <button
-                        aria-label="Edit product"
-                        className="text-blue-600 hover:text-blue-800 transition"
+                        aria-label="Edit"
+                        className="text-gray-500 cursor-pointer hover:text-gray-600"
                       >
                         <Pencil size={18} />
                       </button>
                       <button
-                        aria-label="Delete product"
-                        className="text-red-600 hover:text-red-800 transition"
+                        aria-label="Delete"
+                        className="text-red-600 cursor-pointer hover:text-red-800"
                       >
                         <Trash2 size={18} />
                       </button>
                       <button
-                        aria-label="More options"
-                        className="text-gray-500 hover:text-gray-700 transition"
+                        aria-label="More"
+                        className="text-gray-500 cursor-pointer hover:text-gray-700"
                       >
                         <MoreVertical size={18} />
                       </button>
@@ -255,40 +271,72 @@ export default function ProductsPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-          <div className="text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t border-gray-200 gap-4">
+          <p className="text-sm text-gray-600">
             Showing {startIndex + 1} to{" "}
-            {Math.min(startIndex + ITEMS_PER_PAGE, products.length)} of{" "}
-            {products.length} products
-          </div>
+            {Math.min(startIndex + ITEMS_PER_PAGE, totalProducts)} of{" "}
+            {totalProducts} products
+          </p>
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50 transition"
             >
               <ChevronLeft size={18} />
             </button>
 
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
-                  currentPage === page
-                    ? "bg-black text-white"
-                    : "border border-gray-300 hover:bg-gray-100"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
+            {/* Smart pagination: show first, last, current ±1, and ellipsis */}
+            {totalPages > 7 ? (
+              <>
+                {currentPage > 3 && <span className="px-3 py-1">...</span>}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let page = i + 1;
+                  if (currentPage > 3) page = currentPage - 2 + i;
+                  if (page > totalPages) return null;
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
+                        currentPage === page
+                          ? "bg-black text-white"
+                          : "border border-gray-300 hover:bg-gray-100"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+                {currentPage < totalPages - 2 && (
+                  <span className="px-3 py-1">...</span>
+                )}
+              </>
+            ) : (
+              Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
+                      currentPage === page
+                        ? "bg-black text-white"
+                        : "border border-gray-300 hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )
+            )}
 
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50 transition"
             >
               <ChevronRight size={18} />
             </button>
