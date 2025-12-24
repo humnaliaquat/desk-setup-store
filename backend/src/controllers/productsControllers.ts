@@ -15,6 +15,7 @@ export const createProduct = async (req: Request, res: Response) => {
       tags,
       variants,
       stock,
+      status,
     } = req.body;
 
     // images
@@ -47,6 +48,7 @@ export const createProduct = async (req: Request, res: Response) => {
       description,
       images,
       category,
+      status,
       tags: parsedTags,
       variants: parsedVariants,
       stock: parsedStock,
@@ -86,3 +88,29 @@ export const getProducts = async (req: Request, res: Response) => {
     });
   }
 };
+// delete single project
+export const deleteProDuct = async (req:Request, res:Response) =>{
+  try{
+    const {id} = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+    const product = await Products.findByIdAndDelete(id);
+   if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+      deletedProduct: product, 
+    });
+  }
+  catch (err: any) {
+    console.error("Error deleting product:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error: Unable to delete product",
+      error: process.env.NODE_ENV === "development" ? err.message : undefined,
+    });
+  }
+}

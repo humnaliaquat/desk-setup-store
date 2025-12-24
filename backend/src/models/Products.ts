@@ -52,7 +52,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-
+    status:{
+      type:String,
+      trim: true,
+    },
     images: [
       {
         url: {

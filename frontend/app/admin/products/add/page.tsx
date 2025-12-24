@@ -5,19 +5,18 @@ import {
   Images,
   UploadCloud,
   X,
-  Calendar,
   Tag,
   Plus,
   Trash2,
   Info,
   Loader2,
   Layers,
+  ToggleLeft,
 } from "lucide-react";
-import { format } from "date-fns";
 import axios from "axios";
 
 type Variant = {
-  name: string; // e.g. "Black / M", "White / 40"
+  name: string;
   price?: number;
   stock: number;
 };
@@ -27,11 +26,11 @@ type Product = {
   description: string;
   tags: string[];
   category: string;
-  price: number; // base price
-  images: File[];
+  price: number;
   stock: number;
+  status: "Active" | "Draft";
+  images: File[];
   variants: Variant[];
-  dateAdded?: string;
 };
 
 export default function AddProduct() {
@@ -40,13 +39,13 @@ export default function AddProduct() {
     description: "",
     price: 0,
     category: "",
+    stock: 0,
+    status: "Active",
     images: [],
     tags: [],
-    stock: 0,
     variants: [],
   });
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [newTag, setNewTag] = useState("");
   const [newVariant, setNewVariant] = useState({
     name: "",
@@ -59,7 +58,7 @@ export default function AddProduct() {
     text: string;
   } | null>(null);
 
-  // Handle image upload
+  // Image handlers
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files).filter((f) =>
@@ -110,12 +109,14 @@ export default function AddProduct() {
 
   // Variants
   const addVariant = () => {
-    if (!newVariant.name || !newVariant.stock) return;
+    if (!newVariant.name.trim() || !newVariant.stock) return;
+
     const variant: Variant = {
       name: newVariant.name.trim(),
       price: newVariant.price ? parseFloat(newVariant.price) : undefined,
-      stock: parseInt(newVariant.stock),
+      stock: parseInt(newVariant.stock, 10),
     };
+
     setProduct((prev) => ({
       ...prev,
       variants: [...prev.variants, variant],
@@ -130,14 +131,15 @@ export default function AddProduct() {
     }));
   };
 
-  // Form changes
+  // General input handler
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setProduct((prev) => ({
       ...prev,
-      [name]: name === "price" ? parseFloat(value) || 0 : value,
+      [name]:
+        name === "price" || name === "stock" ? parseFloat(value) || 0 : value,
     }));
   };
 
@@ -172,12 +174,10 @@ export default function AddProduct() {
       formData.append("price", product.price.toString());
       formData.append("category", product.category);
       formData.append("stock", product.stock.toString());
+      formData.append("status", product.status);
 
-      formData.append("dateAdded", format(selectedDate, "yyyy-MM-dd"));
       product.tags.forEach((tag) => formData.append("tags[]", tag));
       product.images.forEach((img) => formData.append("images", img));
-
-      // Send variants as JSON string (or adjust backend to handle multiple fields)
       formData.append("variants", JSON.stringify(product.variants));
 
       await axios.post("http://localhost:5000/api/products", formData, {
@@ -185,17 +185,21 @@ export default function AddProduct() {
       });
 
       setMessage({ type: "success", text: "Product added successfully!" });
+
       // Reset form
       setProduct({
         name: "",
         description: "",
         price: 0,
         category: "",
+        stock: 0,
+        status: "Active",
         images: [],
         tags: [],
         variants: [],
-        stock: 0,
       });
+      setNewVariant({ name: "", price: "", stock: "" });
+      setNewTag("");
     } catch (err: any) {
       setMessage({
         type: "error",
@@ -238,7 +242,7 @@ export default function AddProduct() {
           <div
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
-            className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-500 transition"
+            className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-500 transition cursor-pointer"
           >
             <input
               type="file"
@@ -248,7 +252,7 @@ export default function AddProduct() {
               id="imageUpload"
               onChange={handleImageChange}
             />
-            <label htmlFor="imageUpload" className="cursor-pointer">
+            <label htmlFor="imageUpload" className="cursor-pointer block">
               <UploadCloud className="w-16 h-16 mx-auto text-gray-400 mb-4" />
               <p className="text-lg font-medium">
                 Drag & drop or click to upload
@@ -269,7 +273,7 @@ export default function AddProduct() {
                   <div key={i} className="relative group">
                     <img
                       src={URL.createObjectURL(img)}
-                      alt="preview"
+                      alt={`Preview ${i + 1}`}
                       className="w-full h-32 object-cover rounded-xl border"
                     />
                     <button
@@ -285,7 +289,7 @@ export default function AddProduct() {
           )}
         </div>
 
-        {/* Form Details */}
+        {/* Product Form */}
         <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
           <h2 className="text-xl font-semibold mb-6">Product Information</h2>
 
@@ -324,6 +328,23 @@ export default function AddProduct() {
               </select>
             </div>
 
+            {/* Status */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2  items-center gap-2">
+                <ToggleLeft size={18} />
+                Status
+              </label>
+              <select
+                name="status"
+                value={product.status}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              >
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+              </select>
+            </div>
+
             {/* Base Price */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -346,16 +367,19 @@ export default function AddProduct() {
               </div>
             </div>
 
-            {/* Inventory Quantity (for no variants) */}
+            {/* Total Stock (if no variants) */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Total Inventory
+                Total Inventory (without variants)
               </label>
               <input
+                name="stock"
                 type="number"
                 min="0"
+                value={product.stock || ""}
+                onChange={handleChange}
+                placeholder="e.g. 100"
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="e.g. 50"
               />
             </div>
 
@@ -363,7 +387,7 @@ export default function AddProduct() {
             <div>
               <label className=" text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
                 <Layers size={18} />
-                Product Variants
+                Product Variants (optional)
               </label>
 
               {product.variants.length > 0 && (
@@ -391,22 +415,21 @@ export default function AddProduct() {
                 </div>
               )}
 
-              {/* Add new variant */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   name="name"
                   value={newVariant.name}
                   onChange={handleVariantChange}
-                  placeholder="e.g. Black / M"
+                  placeholder="Variant name (e.g. Black / M)"
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 />
 
                 <input
                   name="stock"
-                  value={product.stock}
-                  onChange={handleChange}
                   type="number"
                   min="0"
+                  value={newVariant.stock}
+                  onChange={handleVariantChange}
                   placeholder="Stock"
                   className="w-28 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 />
@@ -468,7 +491,7 @@ export default function AddProduct() {
             </div>
           </div>
 
-          {/* Buttons */}
+          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row justify-end gap-4 mt-10 pt-6 border-t border-gray-200">
             <button
               type="button"
@@ -478,11 +501,14 @@ export default function AddProduct() {
                   description: "",
                   price: 0,
                   category: "",
-                  images: [],
                   stock: 0,
+                  status: "Active",
+                  images: [],
                   tags: [],
                   variants: [],
                 });
+                setNewVariant({ name: "", price: "", stock: "" });
+                setNewTag("");
                 setMessage(null);
               }}
               className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition"
