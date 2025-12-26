@@ -464,9 +464,18 @@ export default function AddProduct() {
 
             {/* Tags */}
             <div>
-              <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                <Tag size={18} />
-                Tags (optional)
+              <label className="text-sm font-medium text-gray-700 mb-2 flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <Tag size={18} />
+                  Tags (optional)
+                </div>
+                <p className="text-xs text-gray-500 flex items-center gap-1">
+                  <Info size={14} />
+                  Add <span className="font-semibold">"featured"</span> for
+                  featured section or{" "}
+                  <span className="font-semibold">"bestseller"</span> for best
+                  sellers section.
+                </p>
               </label>
               <div className="flex flex-wrap gap-2 mb-3">
                 {product.tags.map((tag) => (

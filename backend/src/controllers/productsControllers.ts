@@ -1,5 +1,6 @@
 import Products from "../models/Products.js";
 import type { Request, Response } from "express";
+import { v2 as cloudinary } from "cloudinary";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
@@ -88,29 +89,136 @@ export const getProducts = async (req: Request, res: Response) => {
     });
   }
 };
-// delete single project
-export const deleteProDuct = async (req:Request, res:Response) =>{
-  try{
-    const {id} = req.params;
+
+
+
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
     if (!id) {
-      return res.status(400).json({ message: "Product ID is required" });
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
     }
-    const product = await Products.findByIdAndDelete(id);
-   if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+
+    const product = await Products.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
     }
+
+    /*  Delete Images from Cloudinary  */
+    if (product.images && product.images.length > 0) {
+      for (const image of product.images) {
+        if (image.public_id) {
+          await cloudinary.uploader.destroy(image.public_id);
+        }
+      }
+    }
+
+    /*  Delete Product */
+    await Products.findByIdAndDelete(id);
+
     res.status(200).json({
       success: true,
       message: "Product deleted successfully",
-      deletedProduct: product, 
+      deletedProduct: product,
     });
-  }
-  catch (err: any) {
-    console.error("Error deleting product:", err);
+  } catch (error: any) {
+    console.error("Error deleting product:", error);
+
     res.status(500).json({
       success: false,
-      message: "Server error: Unable to delete product",
-      error: process.env.NODE_ENV === "development" ? err.message : undefined,
+      message: error.message || "Server error: Unable to delete product",
     });
   }
-}
+};
+
+export const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      name,
+      price,
+      description,
+      category,
+      tags,
+      variants,
+      stock,
+      status,
+    } = req.body;
+
+    
+    let images: any[] = [];
+
+    if (req.files && Array.isArray(req.files)) {
+      images = req.files.map((file: any) => ({
+        url: file.path,
+        public_id: file.filename,
+      }));
+    }
+
+    
+    const parsedTags = Array.isArray(tags)
+      ? tags
+      : typeof tags === "string"
+      ? tags.split(",").map((t) => t.trim())
+      : [];
+
+    
+    let parsedVariants: any[] = [];
+
+    if (variants) {
+      parsedVariants =
+        typeof variants === "string" ? JSON.parse(variants) : variants;
+    }
+
+    
+    const parsedStock =
+      parsedVariants.length > 0 ? 0 : Number(stock || 0);
+
+    
+    const product = await Products.findByIdAndUpdate(
+      id,
+      {
+        name,
+        price,
+        description,
+        category,
+        status,
+        tags: parsedTags,
+        variants: parsedVariants,
+        stock: parsedStock,
+        ...(images.length > 0 && { images }),
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+    });
+  }
+};

@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { MoveRight, Circle } from "lucide-react";
+
 import setup from "../../public/covers/setup.jpg";
 import { DM_Serif_Display } from "next/font/google";
 import CategoriesSection from "@/app/componenets/homePageItems/CategoriesSection";
@@ -11,6 +12,7 @@ import CollectionSec from "@/app/componenets/homePageItems/CollectionSec";
 import BestSeller from "@/app/componenets/homePageItems/BestSeller";
 import BlogSec from "@/app/componenets/homePageItems/BlogSec";
 import Divider from "@/app/componenets/homePageItems/Divider";
+import { useEffect, useState } from "react";
 
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],

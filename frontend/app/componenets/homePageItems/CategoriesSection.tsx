@@ -1,11 +1,14 @@
 "use client";
 import Image from "next/image";
+import { useRef } from "react";
+
 import { Truck, RotateCcw, Headphones, ShieldCheck } from "lucide-react";
 
 import keyboard from "../../../public/products/keyboard/AulaBlue.jpg";
 import mice from "@/public/products/Mice/vssoplor.jpg";
 import mat from "@/public/products/mat/reniteco.jpg";
 import light from "@/public/products/lights/Voncerus.jpg";
+import { useEffect, useState } from "react";
 
 export default function CategoriesSection() {
   const items = [
