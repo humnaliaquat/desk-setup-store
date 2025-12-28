@@ -29,20 +29,20 @@ export default function UserLayout({
       },
     });
   }, []);
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-start px-10">
-        <motion.div
-          initial={{ x: 0 }}
-          animate={{ x: "120vw" }}
-          transition={{ duration: 4, ease: "easeOut" }}
-          className="text-2xl font-bold"
-        >
-          <motion.span>{rounded}</motion.span>%
-        </motion.div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="h-screen flex items-center justify-start px-10">
+  //       <motion.div
+  //         initial={{ x: 0 }}
+  //         animate={{ x: "120vw" }}
+  //         transition={{ duration: 4, ease: "easeOut" }}
+  //         className="text-lg font-bold"
+  //       >
+  //         <motion.span>{rounded}</motion.span>%
+  //       </motion.div>
+  //     </div>
+  //   );
+  // }
   return (
     <div className={jakarta.className}>
       <div>

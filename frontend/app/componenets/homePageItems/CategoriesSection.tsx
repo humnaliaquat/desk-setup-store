@@ -1,14 +1,13 @@
 "use client";
-import Image from "next/image";
-import { useRef } from "react";
 
+import Image from "next/image";
+import { motion, Variants } from "framer-motion";
 import { Truck, RotateCcw, Headphones, ShieldCheck } from "lucide-react";
 
 import keyboard from "../../../public/products/keyboard/AulaBlue.jpg";
 import mice from "@/public/products/Mice/vssoplor.jpg";
 import mat from "@/public/products/mat/reniteco.jpg";
 import light from "@/public/products/lights/Voncerus.jpg";
-import { useEffect, useState } from "react";
 
 export default function CategoriesSection() {
   const items = [
@@ -41,13 +40,70 @@ export default function CategoriesSection() {
     { title: "Lights", items: "03 ITEMS", image: light },
   ];
 
+  // Stagger container for smooth sequential reveal
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { x: 60, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 90,
+        damping: 20,
+        mass: 0.8,
+      },
+    },
+  };
+
+  const collectionVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const collectionItemVariants: Variants = {
+    hidden: { y: 50, opacity: 0, scale: 0.98 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 70,
+        damping: 22,
+        mass: 1,
+      },
+    },
+  };
+
   return (
     <div className="w-full px-6 lg:px-20 py-14 space-y-16 mt-5">
       {/* FEATURES */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <motion.div
+        className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         {items.map((item, index) => (
-          <div
+          <motion.div
             key={index}
+            variants={itemVariants}
             className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/60 transition"
           >
             <div className="p-3 rounded-xl mt-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
@@ -60,16 +116,23 @@ export default function CategoriesSection() {
                 {item.description}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* COLLECTION GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+        variants={collectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-110px" }}
+      >
         {collection.map((col, index) => (
-          <div
+          <motion.div
             key={index}
-            className="relative h-54  overflow-hidden group cursor-pointer hover:-translate-y-2 rounded transition-all duration-300"
+            variants={collectionItemVariants}
+            className="relative h-54 overflow-hidden group cursor-pointer hover:-translate-y-2 rounded transition-all duration-300"
           >
             {/* IMAGE */}
             <Image
@@ -95,9 +158,9 @@ export default function CategoriesSection() {
                 {col.title}
               </span>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -213,8 +213,10 @@ export default function AddProduct() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-10">
-        <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Add New Product
+        </h1>
+        <p className="text-gray-600 text-sm">
           Create a new product listing for your store.
         </p>
       </div>
