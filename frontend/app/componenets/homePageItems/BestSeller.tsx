@@ -16,17 +16,38 @@ export default function BestSeller() {
     <div className="px-20 mt-14 py-4 ">
       {/* Heading */}
       <div className="flex flex-col items-center text-center mb-12">
-        <h1 className="text-3xl md:text-5xl font-semibold mb-2">
+        <motion.h1
+          className="text-3xl md:text-5xl font-semibold mb-2"
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-20px" }}
+          transition={{ type: "spring", delay: 0.15 }}
+        >
           Best Seller <span className="text-orange-400">Products</span>
-        </h1>
-        <p className="text-gray-600 max-w-lg text-sm md:text-base">
+        </motion.h1>
+        <motion.p
+          className="text-gray-600 max-w-lg text-sm md:text-base"
+          initial={{ y: 15, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-20px" }}
+          transition={{ type: "spring", delay: 0.15 }}
+        >
           Build your dream workspace with curated setups and accessories.
-        </p>
+        </motion.p>
       </div>
       <div className="grid grid-cols-4 gap-6 ">
         {data.map((item, index) => (
-          <div
+          <motion.div
             key={index}
+            initial={{ y: -20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1, backdropFilter: "2px" }}
+            viewport={{ once: true, margin: "-20px" }}
+            transition={{
+              type: "spring",
+
+              delay: index * 0.12,
+              ease: "easeInOut",
+            }}
             className="overflow-hidden hover:shadow-2xl rounded transition p-1.5 cursor-pointer pb-5"
           >
             {/* IMAGE WRAPPER */}
@@ -89,7 +110,7 @@ export default function BestSeller() {
               <h1 className="mt-5 font-semibold text-lg">{item.name}</h1>
               <p className="text-gray-600">{item.price}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
