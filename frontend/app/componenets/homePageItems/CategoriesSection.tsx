@@ -52,15 +52,15 @@ export default function CategoriesSection() {
   };
 
   const itemVariants: Variants = {
-    hidden: { x: 60, opacity: 0 },
+    hidden: { x: 40, opacity: 0 },
     visible: {
       x: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 90,
+        stiffness: 80,
         damping: 20,
-        mass: 0.8,
+        mass: 5,
       },
     },
   };
@@ -70,22 +70,23 @@ export default function CategoriesSection() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.19,
       },
     },
   };
 
   const collectionItemVariants: Variants = {
-    hidden: { y: 0, opacity: 0, scale: 0.95 },
+    hidden: { x: -3, y: 0, opacity: 0, scale: 0.94 },
     visible: {
+      x: 0,
       y: 0,
       opacity: 1,
       scale: 1,
       transition: {
         type: "tween",
-        stiffness: 70,
+        stiffness: 50,
         damping: 22,
-        mass: 1,
+        mass: 5,
       },
     },
   };
@@ -98,7 +99,7 @@ export default function CategoriesSection() {
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-20px" }}
+        viewport={{ once: true }}
       >
         {items.map((item, index) => (
           <motion.div
@@ -126,7 +127,7 @@ export default function CategoriesSection() {
         variants={collectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-20px" }}
+        viewport={{ once: true }}
       >
         {collection.map((col, index) => (
           <motion.div

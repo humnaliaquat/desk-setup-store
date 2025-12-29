@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import setup from "@/public/covers/setup1.jpg";
 import { DM_Serif_Display } from "next/font/google";
+import Link from "next/link";
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
   weight: "400",
@@ -34,9 +35,12 @@ export default function AISection() {
             Let our AI customize the perfect workspace for your needs.
           </p>
 
-          <button className="mt-5 px-6 py-2.5 bg-white hover:brightness-110 text-black rounded-full font-medium  transition drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] cursor-pointer">
+          <Link
+            href={"/user/ai-setup"}
+            className="mt-5 px-6 py-2.5 bg-white hover:brightness-110 text-black rounded-full font-medium  transition drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] cursor-pointer"
+          >
             Customize With AI
-          </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -6,6 +6,7 @@ import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 
 import Footer from "@/app/componenets/userLayout/Footer";
 import { useEffect, useState } from "react";
+import LoadingScreen from "../componenets/homePageItems/LoadingScreen";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -30,29 +31,18 @@ export default function UserLayout({
     });
   }, []);
   // if (loading) {
-  //   return (
-  //     <div className="h-screen flex items-center justify-start px-10">
-  //       <motion.div
-  //         initial={{ x: 0 }}
-  //         animate={{ x: "120vw" }}
-  //         transition={{ duration: 4, ease: "easeOut" }}
-  //         className="text-lg font-bold"
-  //       >
-  //         <motion.span>{rounded}</motion.span>%
-  //       </motion.div>
-  //     </div>
-  //   );
+  //   return <LoadingScreen />;
   // }
   return (
     <div className={jakarta.className}>
       <div>
         {/* Optional top banner */}
-        <div className="flex justify-center text-white font-medium py-2.5 items-center bg-orange-400 text-xs">
+        <motion.div className="flex justify-center text-white font-medium py-2.5 items-center bg-orange-400 text-xs">
           <h1 className="text-sm">
             ENJOY FREE STANDARD DELIVERY ON ORDERS OVER 2000 RUPEES.{" "}
             <span className="underline">SHOP NOW</span>
           </h1>
-        </div>
+        </motion.div>
 
         {/* Navbar */}
         <Navbar />

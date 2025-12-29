@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import keyboard from "@/public/products/lights/Voncerus.jpg";
 import { AnimatePresence, hover, motion } from "motion/react";
+import { DM_Serif_Display } from "next/font/google";
 import { Eye, ShoppingCart, SlidersHorizontal } from "lucide-react";
 export default function BestSeller() {
   const data = [
@@ -16,7 +17,7 @@ export default function BestSeller() {
     <div className="px-20 mt-14 py-4 ">
       {/* Heading */}
       <div className="flex flex-col items-center text-center mb-12">
-        <h1 className="text-3xl md:text-5xl font-semibold mb-2">
+        <h1 className={`text-3xl md:text-5xl font-semibold mb-2`}>
           Featured <span className="text-orange-400">Products</span>
         </h1>
         <p className="text-gray-600 max-w-lg text-sm md:text-base">
