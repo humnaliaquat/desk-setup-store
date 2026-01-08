@@ -1,68 +1,57 @@
 "use client";
+
 import React from "react";
-import { ShoppingCart, Heart, UserRound, Search } from "lucide-react";
+import { ShoppingCart, Heart, UserRound, Menu } from "lucide-react";
 import Link from "next/link";
 
 function Navbar() {
   return (
-    <div className="w-full h-17 flex items-center justify-between px-6 md:px-20">
-      {/* Left side - Logo and Links */}
-      <div className="flex items-center space-x-10 md:space-x-14">
-        <h1 className="text-2xl font-semibold text-orange-400 tracking-widest">
+    <nav className="w-full h-16 flex items-center justify-between px-6 md:px-20 border-b border-gray-300">
+      {/* LEFT */}
+      <div className="flex items-center gap-10">
+        {/* Logo */}
+        <Link
+          href="/user"
+          className="text-2xl font-semibold text-orange-400 tracking-widest"
+        >
           DESKIO
-        </h1>
+        </Link>
 
-        <ul className="hidden md:flex space-x-10 md:space-x-14 text-sm font-bold">
-          <Link
-            href={"/user"}
-            className="cursor-pointer hover:text-gray-600 nav-link"
-          >
-            HOME
-          </Link>
-          <Link
-            href={"/user/store"}
-            className="cursor-pointer hover:text-gray-600 nav-link"
-          >
-            STORE
-          </Link>
-          <Link
-            href={"/user/collection"}
-            className="cursor-pointer hover:text-gray-600 nav-link"
-          >
-            COLLECTION
-          </Link>
-          <Link
-            href={"/user/ai-setup"}
-            className="cursor-pointer hover:text-gray-600 nav-link"
-          >
-            AI SETUP
-          </Link>
-          <Link
-            href={"/user/blog"}
-            className="cursor-pointer hover:text-gray-600 nav-link"
-          >
-            BLOG
-          </Link>
-          <Link
-            href={"/user/about"}
-            className="cursor-pointer hover:text-gray-600 nav-link"
-          >
-            ABOUT
-          </Link>
+        {/* Desktop Links */}
+        <ul className="hidden md:flex items-center gap-8 text-sm font-bold">
+          {[
+            { name: "HOME", href: "/user" },
+            { name: "STORE", href: "/user/store" },
+            { name: "COLLECTION", href: "/user/collection" },
+            { name: "AI SETUP", href: "/user/ai-setup" },
+            { name: "BLOG", href: "/user/blog" },
+            { name: "ABOUT", href: "/user/about" },
+          ].map((item) => (
+            <li key={item.name}>
+              <Link
+                href={item.href}
+                className="hover:text-gray-500 transition-colors"
+              >
+                {item.name}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
 
-      {/* Right side - Search & Icons */}
-      <div className="flex items-center space-x-4 text-black">
-        <Search className="h-5 w-5 cursor-pointer" />
-
-        <Link href={"/user/cart"} className="p-2 hover:bg-gray-100 rounded-md">
+      {/* RIGHT */}
+      <div className="flex items-center gap-2 md:gap-4">
+        {/* Desktop Icons */}
+        <Link
+          href="/user/cart"
+          className="hidden md:flex p-2 hover:bg-gray-100 rounded-md"
+        >
           <ShoppingCart className="h-5 w-5" />
         </Link>
 
         <Link
-          href={"/user/wishlist"}
-          className="p-2 hover:bg-gray-100 rounded-md"
+          href="/user/wishlist"
+          className="hidden md:flex p-2 hover:bg-gray-100 rounded-md"
         >
           <Heart className="h-5 w-5" />
         </Link>
@@ -70,8 +59,13 @@ function Navbar() {
         <button className="p-2 hover:bg-gray-100 rounded-md">
           <UserRound className="h-5 w-5" />
         </button>
+
+        {/* Mobile Menu Button */}
+        <button className="md:hidden p-2 hover:bg-gray-100 rounded-md">
+          <Menu className="h-6 w-6" />
+        </button>
       </div>
-    </div>
+    </nav>
   );
 }
 

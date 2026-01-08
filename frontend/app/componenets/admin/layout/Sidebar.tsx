@@ -90,6 +90,17 @@ export default function Sidebar() {
           <Plus size={14} />
           Add Product
         </Link>
+        <Link
+          href="/admin/products/collection"
+          className={`flex items-center gap-1 px-4 py-1.5 rounded-md text-sm hover:bg-gray-100 ${
+            path === "/admin/products/collection"
+              ? "text-black font-semibold"
+              : ""
+          }`}
+        >
+          <Plus size={14} />
+          Add Collection
+        </Link>
       </div>
 
       {/* ORDERS */}

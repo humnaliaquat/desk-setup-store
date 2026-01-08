@@ -31,11 +31,11 @@ export default function Page() {
       <nav className="text-sm mb-6">
         <ul className="flex gap-2 items-center text-gray-600">
           <li>
-            <a href="/">Home</a>
+            <a href="/user">Home</a>
           </li>
           <p>&gt;</p>
           <li>
-            <a href="/store">Store</a>
+            <a href="/user/store">Store</a>
           </li>
           <p>&gt;</p>
           <li className="font-medium text-black">Product Name</li>

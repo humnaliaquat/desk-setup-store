@@ -74,7 +74,7 @@ export default function BestSeller() {
               <AnimatePresence>
                 {showOverlay === index && (
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-between p-2"
+                    className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent flex flex-col justify-between p-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}

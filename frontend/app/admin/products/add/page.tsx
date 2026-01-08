@@ -66,7 +66,7 @@ export default function AddProduct() {
     );
     setProduct((prev) => ({
       ...prev,
-      images: [...prev.images, ...files].slice(0, 10),
+      images: [...prev.images, ...files].slice(0, 12),
     }));
   };
 
@@ -77,7 +77,7 @@ export default function AddProduct() {
     );
     setProduct((prev) => ({
       ...prev,
-      images: [...prev.images, ...files].slice(0, 10),
+      images: [...prev.images, ...files].slice(0, 12),
     }));
   };
 
@@ -268,7 +268,7 @@ export default function AddProduct() {
           {product.images.length > 0 && (
             <div className="mt-6">
               <p className="text-sm font-medium text-gray-700 mb-3">
-                Uploaded ({product.images.length}/10)
+                Uploaded ({product.images.length}/12)
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {product.images.map((img, i) => (

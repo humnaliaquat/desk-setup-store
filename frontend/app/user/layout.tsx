@@ -3,10 +3,12 @@ import "@/app/globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Navbar from "@/app/componenets/userLayout/Navbar";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-
+import { X } from "lucide-react";
 import Footer from "@/app/componenets/userLayout/Footer";
 import { useEffect, useState } from "react";
 import LoadingScreen from "../componenets/homePageItems/LoadingScreen";
+import Link from "next/link";
+import TopBanner from "../componenets/ui/TopBanner";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -35,14 +37,8 @@ export default function UserLayout({
   // }
   return (
     <div className={jakarta.className}>
-      <div>
-        {/* Optional top banner */}
-        <motion.div className="flex justify-center text-white font-medium py-2.5 items-center bg-orange-400 text-xs">
-          <h1 className="text-sm">
-            ENJOY FREE STANDARD DELIVERY ON ORDERS OVER 2000 RUPEES.{" "}
-            <span className="underline">SHOP NOW</span>
-          </h1>
-        </motion.div>
+      <div className="relative">
+        <TopBanner />
 
         {/* Navbar */}
         <Navbar />

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import keyboard from "@/public/products/keyboard/AulaGreen.jpg";
 import ProductCard from "./ProductCard";
 import Link from "next/link";
+import axios from "axios";
 
 interface IconProps {
   active: boolean;
@@ -29,28 +30,34 @@ function IconIII({ active }: IconProps) {
 }
 
 interface ProductType {
-  pic: any;
+  _id: string;
   name: string;
-  price: string;
-  id?: number;
+  price: number;
+  images: { url: string }[];
 }
 
 /* ─────────────────────────────── */
 
 export default function ProductsDisplay() {
+  const [products, setProducts] = useState<ProductType[]>([]);
   const [view, setView] = useState<2 | 3>(3);
   const [sortValue, setSortValue] = useState<string>("popularity");
 
-  const data: ProductType[] = [
-    { id: 1, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { id: 2, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { id: 3, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { id: 4, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { id: 5, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { id: 6, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { id: 7, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-    { id: 8, pic: keyboard, name: "Keyboard", price: "16000 Rs" },
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/products/get");
+        if (!products) {
+          console.log("nothing found");
+        }
+        const safeProducts = Array.isArray(res.data?.data) ? res.data.data : [];
+        setProducts(safeProducts);
+      } catch (err: any) {
+        console.log(err);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <section className="px-10 w-full">
@@ -104,11 +111,19 @@ export default function ProductsDisplay() {
             view === 2 ? "grid-cols-2" : "grid-cols-3"
           }`}
         >
-          {data.map((p, i) => (
-            <Link key={p.id} href={`/store/${p.id}`}>
-              <ProductCard {...p} />
-            </Link>
-          ))}
+          {products.length > 0 ? (
+            products.map((p, i) => (
+              <Link key={p._id} href={`/user/store/${p._id}`}>
+                <ProductCard
+                  pic={p.images[0].url}
+                  name={p.name}
+                  price={`$ ${p.price}`}
+                />
+              </Link>
+            ))
+          ) : (
+            <p className="text-gray-500">No products found</p>
+          )}
         </div>
       </main>
     </section>

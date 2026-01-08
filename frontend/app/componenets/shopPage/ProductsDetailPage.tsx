@@ -7,10 +7,10 @@ export default function ProductsDetailPage() {
       <nav className="text-sm breadcrumbs mb-4">
         <ul>
           <li>
-            <a href="/">Home</a>
+            <a href="/user">Home</a>
           </li>
           <li>
-            <a href="/shop">Shop</a>
+            <a href="/user/shop">Shop</a>
           </li>
           <li>
             <a href="/shop/product/1">Product Name</a>

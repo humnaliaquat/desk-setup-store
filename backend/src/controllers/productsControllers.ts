@@ -222,3 +222,37 @@ export const updateProduct = async (req: Request, res: Response) => {
     });
   }
 };
+//get single product by id
+export const getSingleProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
+    }
+
+    const product = await Products.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product retrieved successfully",
+      product,
+    });
+  } catch (error: any) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Server error: Unable to fetch product",
+    });
+  }
+};

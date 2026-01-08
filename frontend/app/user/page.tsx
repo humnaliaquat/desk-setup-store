@@ -24,79 +24,82 @@ export default function Home() {
   return (
     <main className="flex flex-col">
       {/* Hero Section */}
-      <div className="w-full h-[500px] relative overflow-hidden">
+      <div className="w-full h-[420px] sm:h-[480px] md:h-[560px] lg:h-[580px] relative overflow-hidden">
         {/* Overlay */}
-        <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent z-1" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/30 to-transparent z-10" />
 
         {/* Background Image */}
         <Image
           src={setup}
           alt="Desk Setup"
           fill
-          className="object-cover object-[center_72%] opacity-95"
+          priority
+          className="object-cover object-[center_72%]"
         />
 
-        {/* Hero Text */}
-        <div className="absolute top-0 w-full h-full flex flex-col items-start justify-center text-left text-white px-10 md:px-20 z-20">
-          <motion.h1
-            className={`${dmSerif.className} text-4xl md:text-6xl font-extrabold mb-6 drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)] leading-tight lg:leading-[1.05]`}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            Build Your <br /> Perfect Desk Setup
-          </motion.h1>
-
-          <motion.p
-            className="text-sm md:text-base font-thin mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          >
-            From keyboards to lighting, find the essentials that complete <br />
-            your setup. Make your desk look clean, cozy, and functional.
-          </motion.p>
-
-          <motion.div
-            className="flex gap-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          >
-            <Link
-              href={"/user/ai-setup"}
-              className="text-white bg-transparent border border-white font-semibold py-2.5 px-6 rounded-full"
+        {/* Hero Content */}
+        <div className="absolute inset-0 z-20 flex items-center">
+          <div className="w-full px-5 sm:px-8 md:px-20 text-white">
+            <motion.h1
+              className={`${dmSerif.className} text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]`}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              Try AI Setup Builder
-            </Link>
+              Build Your <br className="hidden sm:block" />
+              Perfect Desk Setup
+            </motion.h1>
 
-            <Link
-              href={"/user/store"}
-              className="text-black bg-white hover:brightness-110 transition font-semibold py-3 px-6 rounded-full shadow-lg flex justify-center items-center gap-2"
+            <motion.p
+              className="text-xs sm:text-sm md:text-base max-w-xl font-light mb-6 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Shop Now
-              <span
-                className="inline-block"
-                style={{
-                  animation: "slideX 1s ease-in-out infinite",
-                }}
+              From keyboards to lighting, find the essentials that complete your
+              setup. Make your desk look clean, cozy, and functional.
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 sm:gap-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <Link
+                href="/user/ai-setup"
+                className="text-white border border-white/80 hover:bg-white hover:text-black transition font-semibold py-2.5 px-6 rounded-full text-center"
               >
-                <MoveRight className="w-5 h-5" />
-              </span>
-              <style jsx>{`
-                @keyframes slideX {
-                  0%,
-                  100% {
-                    transform: translateX(0);
-                  }
-                  50% {
-                    transform: translateX(4px);
-                  }
-                }
-              `}</style>
-            </Link>
-          </motion.div>
+                Try AI Setup Builder
+              </Link>
+
+              <Link
+                href="/user/store"
+                className="text-black bg-white hover:brightness-110 transition font-semibold py-3 px-6 rounded-full shadow-lg flex justify-center items-center gap-2"
+              >
+                Shop Now
+                <span className="inline-block animate-slideX">
+                  <MoveRight className="w-5 h-5" />
+                </span>
+              </Link>
+            </motion.div>
+          </div>
         </div>
+
+        <style jsx>{`
+          @keyframes slideX {
+            0%,
+            100% {
+              transform: translateX(0);
+            }
+            50% {
+              transform: translateX(4px);
+            }
+          }
+          .animate-slideX {
+            animation: slideX 1s ease-in-out infinite;
+          }
+        `}</style>
       </div>
 
       {/* Page Sections */}
