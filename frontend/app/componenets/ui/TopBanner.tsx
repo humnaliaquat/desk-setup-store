@@ -13,7 +13,7 @@ export default function TopBanner() {
         <motion.div
           exit={{ y: -40, opacity: 0 }}
           transition={{ duration: 0.35, ease: "easeInOut" }}
-          className="relative flex justify-center items-center bg-orange-400 text-white font-medium px-4 py-2 sm:py-2.5"
+          className="relative flex justify-center items-center bg-orange-400 text-white font-medium px-4 py-2 sm:py-2"
         >
           <h1 className="text-xs sm:text-sm text-center leading-relaxed">
             ENJOY FREE STANDARD DELIVERY ON ORDERS OVER{" "}

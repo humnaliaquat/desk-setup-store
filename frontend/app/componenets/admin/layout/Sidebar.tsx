@@ -87,7 +87,6 @@ export default function Sidebar() {
             path === "/admin/products/add" ? "text-black font-semibold" : ""
           }`}
         >
-          <Plus size={14} />
           Add Product
         </Link>
         <Link
@@ -98,8 +97,7 @@ export default function Sidebar() {
               : ""
           }`}
         >
-          <Plus size={14} />
-          Add Collection
+          Collection
         </Link>
       </div>
 

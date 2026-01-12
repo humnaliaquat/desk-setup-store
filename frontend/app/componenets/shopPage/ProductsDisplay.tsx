@@ -89,19 +89,6 @@ export default function ProductsDisplay() {
           {/* Showing text */}
           <h1 className="text-gray-600 text-sm">Showing 1–12 of 15 results</h1>
         </div>
-
-        {/* Sorting */}
-        <select
-          className="border  border-gray-300 rounded p-2 text-sm"
-          value={sortValue}
-          onChange={(e) => setSortValue(e.target.value)}
-        >
-          <option value="popularity">Sort by popularity</option>
-          <option value="rating">Sort by rating</option>
-          <option value="newness">Sort by newness</option>
-          <option value="priceLowToHigh">Price: low → high</option>
-          <option value="priceHighToLow">Price: high → low</option>
-        </select>
       </header>
 
       {/* PRODUCT GRID */}
