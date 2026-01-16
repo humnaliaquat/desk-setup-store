@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, DragEvent, useState } from "react";
+import React, { ChangeEvent, DragEvent, useEffect, useState } from "react";
 import {
   Images,
   UploadCloud,
@@ -16,13 +16,16 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import Link from "next/link";
-
+import { useParams } from "next/navigation";
 type Variant = {
   name: string;
   price?: number;
   stock: number;
 };
-
+type ImageType = {
+  url: string;
+  public_id: string;
+};
 type Product = {
   name: string;
   description: string;
@@ -32,10 +35,13 @@ type Product = {
   stock: number;
   status: "Active" | "Draft";
   images: File[];
+  imageUrls: ImageType[];
   variants: Variant[];
 };
 
-export default function AddProduct() {
+export default function ViewAndEditProduct() {
+  const params = useParams();
+  const id = params?.id;
   const [product, setProduct] = useState<Product>({
     name: "",
     description: "",
@@ -44,9 +50,45 @@ export default function AddProduct() {
     stock: 0,
     status: "Active",
     images: [],
+    imageUrls: [],
     tags: [],
     variants: [],
   });
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchProduct = async () => {
+      try {
+        setIsLoading(true);
+        const { data } = await axios.get(
+          `http://localhost:5000/api/products/${id}`
+        );
+        const p = data.product; // <-- grab the product object
+        setProduct({
+          name: p.name ?? "",
+          description: p.description ?? "",
+          price: p.price ?? 0,
+          category: p.category ?? "",
+          stock: p.stock ?? 0,
+          status: p.status ?? "Active",
+          images: [],
+          imageUrls: p.images || [],
+          tags: p.tags || [],
+          variants: p.variants || [],
+        });
+      } catch (err: any) {
+        setMessage({
+          type: "error",
+          text: err.response?.data?.message || "Failed to load product",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const [newTag, setNewTag] = useState("");
   const [newVariant, setNewVariant] = useState({
@@ -141,7 +183,11 @@ export default function AddProduct() {
     setProduct((prev) => ({
       ...prev,
       [name]:
-        name === "price" || name === "stock" ? parseFloat(value) || 0 : value,
+        name === "price" || name === "stock"
+          ? value
+            ? parseFloat(value)
+            : 0
+          : value,
     }));
   };
 
@@ -161,7 +207,8 @@ export default function AddProduct() {
       setMessage({ type: "error", text: "Please fill all required fields." });
       return;
     }
-    if (product.images.length === 0) {
+
+    if (product.images.length === 0 && product.imageUrls.length === 0) {
       setMessage({ type: "error", text: "At least one image is required." });
       return;
     }
@@ -177,35 +224,20 @@ export default function AddProduct() {
       formData.append("category", product.category);
       formData.append("stock", product.stock.toString());
       formData.append("status", product.status);
-
+      formData.append("existingImages", JSON.stringify(product.imageUrls));
+      formData.append("variants", JSON.stringify(product.variants));
       product.tags.forEach((tag) => formData.append("tags[]", tag));
       product.images.forEach((img) => formData.append("images", img));
-      formData.append("variants", JSON.stringify(product.variants));
 
-      await axios.post("http://localhost:5000/api/products", formData, {
+      await axios.put(`http://localhost:5000/api/products/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setMessage({ type: "success", text: "Product added successfully!" });
-
-      // Reset form
-      setProduct({
-        name: "",
-        description: "",
-        price: 0,
-        category: "",
-        stock: 0,
-        status: "Active",
-        images: [],
-        tags: [],
-        variants: [],
-      });
-      setNewVariant({ name: "", price: "", stock: "" });
-      setNewTag("");
+      setMessage({ type: "success", text: "Product updated successfully!" });
     } catch (err: any) {
       setMessage({
         type: "error",
-        text: err.response?.data?.message || "Failed to add product",
+        text: err.response?.data?.message || "Failed to update product",
       });
     } finally {
       setIsLoading(false);
@@ -214,13 +246,16 @@ export default function AddProduct() {
 
   return (
     <div className="p-6 px-12 max-w-7xl mx-auto">
-      <div className="mb-6 flex gap-1.5 items-center">
+      {isLoading && <Loader2 className="animate-spin text-orange-400" />}
+      {/* Breadcrumb */}
+      <div className="mb-6 flex gap-2 items-center">
         <Link href={"/admin/products"} className="cursor-pointer">
           <Layers className="w-5 h-5 text-orange-400" />
         </Link>
-
         <ChevronRight className="w-3.5 h-3.5 text-stone-500" />
-        <h1 className="text-xl font-semibold text-stone-800">Add Product</h1>
+        <h1 className="text-xl font-semibold text-stone-800">
+          {product.name || "Loading..."}
+        </h1>
       </div>
 
       {message && (
@@ -267,18 +302,43 @@ export default function AddProduct() {
             </label>
           </div>
 
-          {product.images.length > 0 && (
+          {(product.imageUrls.length > 0 || product.images.length > 0) && (
             <div className="mt-6">
               <p className="text-sm font-medium text-stone-700 mb-3">
-                Uploaded ({product.images.length}/12)
+                Uploaded ({product.images.length + product.imageUrls.length}/12)
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {/* Existing images from API */}
+                {product.imageUrls.map((img, i) => (
+                  <div key={`url-${i}`} className="relative group">
+                    <img
+                      src={img.url}
+                      alt={`Preview ${i + 1}`}
+                      className="w-full h-32 object-cover rounded-lg border"
+                    />
+                    <button
+                      onClick={() =>
+                        setProduct((prev) => ({
+                          ...prev,
+                          imageUrls: prev.imageUrls.filter(
+                            (_, idx) => idx !== i
+                          ),
+                        }))
+                      }
+                      className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ))}
+
+                {/* Newly uploaded images */}
                 {product.images.map((img, i) => (
-                  <div key={i} className="relative group">
+                  <div key={`file-${i}`} className="relative group">
                     <img
                       src={URL.createObjectURL(img)}
                       alt={`Preview ${i + 1}`}
-                      className="w-full h-32 object-cover rounded-xl border"
+                      className="w-full h-32 object-cover rounded-lg border"
                     />
                     <button
                       onClick={() => removeImage(i)}
@@ -305,7 +365,7 @@ export default function AddProduct() {
               </label>
               <input
                 name="name"
-                value={product.name}
+                value={product.name ?? ""}
                 onChange={handleChange}
                 placeholder="e.g. Keychron K2 Mechanical Keyboard"
                 className="w-full px-4 py-3 border border-stone-400 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
@@ -319,7 +379,7 @@ export default function AddProduct() {
               </label>
               <select
                 name="category"
-                value={product.category}
+                value={product.category ?? ""}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-stone-400 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none cursor-pointer"
               >
@@ -340,7 +400,7 @@ export default function AddProduct() {
               </label>
               <select
                 name="status"
-                value={product.status}
+                value={product.status ?? ""}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-stone-400 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
               >
@@ -363,7 +423,7 @@ export default function AddProduct() {
                   type="number"
                   step="0.01"
                   min="0"
-                  value={product.price || ""}
+                  value={product.price || 0}
                   onChange={handleChange}
                   placeholder="99.99"
                   className="w-full pl-10 pr-4 py-3 border border-stone-400 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
@@ -380,7 +440,7 @@ export default function AddProduct() {
                 name="stock"
                 type="number"
                 min="0"
-                value={product.stock || ""}
+                value={product.stock || 0}
                 onChange={handleChange}
                 placeholder="e.g. 100"
                 className="w-full px-4 py-3 border border-stone-400 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
@@ -394,7 +454,7 @@ export default function AddProduct() {
                 Product Variants (optional)
               </label>
 
-              {product.variants.length > 0 && (
+              {product.variants?.length > 0 && (
                 <div className="space-y-3 mb-4">
                   {product.variants.map((v, i) => (
                     <div
@@ -422,17 +482,17 @@ export default function AddProduct() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   name="name"
-                  value={newVariant.name}
+                  value={newVariant.name ?? ""}
                   onChange={handleVariantChange}
                   placeholder="Variant name (e.g. Black / M)"
-                  className="flex-1 px-4 py-3 border border-stone-400 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
+                  className="flex-1 px-4 py-3 border border-stone-400 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
                 />
 
                 <input
                   name="stock"
                   type="number"
                   min="0"
-                  value={newVariant.stock}
+                  value={newVariant.stock ?? 0}
                   onChange={handleVariantChange}
                   placeholder="Stock"
                   className="w-28 px-4 py-3 border border-stone-400 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
@@ -454,7 +514,7 @@ export default function AddProduct() {
               </label>
               <textarea
                 name="description"
-                value={product.description}
+                value={product.description ?? ""}
                 onChange={handleChange}
                 rows={5}
                 placeholder="Describe features, materials, compatibility..."
@@ -462,7 +522,7 @@ export default function AddProduct() {
                 maxLength={1000}
               />
               <p className="text-xs text-stone-500 mt-2">
-                {product.description.length}/1000 characters
+                {product.description?.length}/1000 characters
               </p>
             </div>
 
@@ -517,6 +577,7 @@ export default function AddProduct() {
                   stock: 0,
                   status: "Active",
                   images: [],
+                  imageUrls: [],
                   tags: [],
                   variants: [],
                 });

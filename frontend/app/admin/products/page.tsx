@@ -198,7 +198,7 @@ export default function ProductsPage() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <header className="mb-5">
-        <h1 className="text-xl font-bold text-stone-900">All Products</h1>
+        <h1 className="text-xl font-semibold text-stone-900">All Products</h1>
       </header>
 
       {/* Stats Cards */}
@@ -206,7 +206,7 @@ export default function ProductsPage() {
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm  transition-shadow"
+            className="bg-white border border-stone-200 rounded-lg p-6 shadow-sm  transition-shadow"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -215,7 +215,7 @@ export default function ProductsPage() {
                   {stat.value}
                 </p>
               </div>
-              <div className={`p-3 rounded-xl bg-${stat.color}-100`}>
+              <div className={`p-3 rounded-lg bg-${stat.color}-100`}>
                 <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
               </div>
             </div>
@@ -224,7 +224,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Main Table Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
         {/* Table Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 border-b border-stone-200">
           <div className="relative w-full sm:w-80">
@@ -232,14 +232,14 @@ export default function ProductsPage() {
             <input
               type="search"
               placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-2 border border-stone-300 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-400 transition text-sm font-medium"
+              className="w-full pl-10 pr-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition text-sm font-medium"
             />
           </div>
 
           <div className="flex gap-3 w-full sm:w-auto">
             <Link
               href={"/admin/products/add"}
-              className="flex items-center gap-2 px-6 py-2 bg-stone-500 text-gray-200 text-sm rounded-full hover:bg-stone-600 hover:text-white transition shadow-md cursor-pointer font-medium "
+              className="flex items-center gap-2 px-6 py-2 bg-orange-400 text-stone-100 text-sm rounded-lg hover:bg-orange-500 hover:text-white transition shadow-md cursor-pointer font-medium "
             >
               <Plus size={18} />
               Add Product
@@ -351,13 +351,13 @@ export default function ProductsPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex justify-end gap-3">
-                          <button
+                          <Link
+                            href={`/admin/products/${product._id}`}
                             aria-label="Edit"
                             className="text-blue-600 hover:text-blue-800 cursor-pointer"
-                            onClick={() => handleEditClick(product)}
                           >
                             <Pencil size={18} />
-                          </button>
+                          </Link>
                           <button
                             aria-label="Delete"
                             className="text-red-600 hover:text-red-800 cursor-pointer"
@@ -458,12 +458,6 @@ export default function ProductsPage() {
           </div>
         </div>
       </div>
-      <EditProductModal
-        isOpen={showEditModal}
-        onClose={() => setShowEditModal(false)}
-        product={editProduct}
-        onSave={handleSaveEdit}
-      />
     </div>
   );
 }

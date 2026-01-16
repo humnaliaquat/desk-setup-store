@@ -16,7 +16,7 @@ export default function AllCollectionsPage() {
 
         <Link
           href={"/admin/products/collection/add"}
-          className="rounded-xl bg-orange-500 px-4 py-1.5 text-sm font-medium text-white hover:bg-orange-600 transition"
+          className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-stone-100 hover:text-white hover:bg-orange-600 transition"
         >
           Add Collection
         </Link>
@@ -28,7 +28,10 @@ export default function AllCollectionsPage() {
           <thead className="bg-stone-100">
             <tr className="text-left text-sm text-stone-700">
               <th className="px-4 py-3">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  className="accent-orange-400 cursor-pointer"
+                />
               </th>
               <th className="px-4 py-3 font-medium">Title</th>
               <th className="px-4 py-3 font-medium">Products Count</th>
